@@ -1,5 +1,5 @@
 #include "mocks/MockAccount.h"
-#include "Transaction.h"  // Добавлен include для Transaction
+#include "Transaction.h"
 #include <gtest/gtest.h>
 
 using ::testing::Return;
@@ -14,9 +14,8 @@ TEST(TransactionTest, MakeSuccessScenario) {
     EXPECT_CALL(from, id()).WillRepeatedly(Return(1));
     EXPECT_CALL(from, Lock()).Times(1);
     EXPECT_CALL(from, GetBalance())
-        .Times(2)
-        .WillOnce(Return(200))
-        .WillOnce(Return(200));
+        .WillOnce(Return(200))  // Первый вызов в Debit
+        .WillOnce(Return(200)); // Второй вызов в SaveToDataBase
     EXPECT_CALL(from, ChangeBalance(-101)).Times(1);
     EXPECT_CALL(from, Unlock()).Times(1);
     
@@ -24,9 +23,8 @@ TEST(TransactionTest, MakeSuccessScenario) {
     EXPECT_CALL(to, id()).WillRepeatedly(Return(2));
     EXPECT_CALL(to, Lock()).Times(1);
     EXPECT_CALL(to, GetBalance())
-        .Times(2)
-        .WillOnce(Return(50))
-        .WillOnce(Return(150));
+        .WillOnce(Return(50))   // Первый вызов в SaveToDataBase
+        .WillOnce(Return(150)); // Второй вызов в SaveToDataBase
     EXPECT_CALL(to, ChangeBalance(100)).Times(1);
     EXPECT_CALL(to, Unlock()).Times(1);
     
