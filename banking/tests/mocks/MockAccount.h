@@ -10,7 +10,4 @@ public:
     MOCK_METHOD(void, ChangeBalance, (int diff), (override));
     MOCK_METHOD(void, Lock, (), (override));
     MOCK_METHOD(void, Unlock, (), (override));
-    
-    // Убираем override и используем публичный метод базового класса
-    int id() const { return Account::id(); }
 };
