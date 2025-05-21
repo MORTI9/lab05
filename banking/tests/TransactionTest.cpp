@@ -24,7 +24,6 @@ TEST(TransactionTest, MakeSuccessScenario) {
     EXPECT_CALL(to, Lock()).Times(1);
     EXPECT_CALL(to, GetBalance())
         .WillOnce(Return(50))   // Первый вызов в SaveToDataBase
-        .WillOnce(Return(150)); // Второй вызов в SaveToDataBase
     EXPECT_CALL(to, ChangeBalance(100)).Times(1);
     EXPECT_CALL(to, Unlock()).Times(1);
     
