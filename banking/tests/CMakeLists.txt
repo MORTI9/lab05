@@ -17,17 +17,16 @@ target_include_directories(banking_tests
     PRIVATE ${CMAKE_SOURCE_DIR}/include
     PRIVATE ${CMAKE_SOURCE_DIR}/tests/mocks
 )
+
 target_link_libraries(banking_tests
     PRIVATE banking
-    PRIVATE GTest::GTest
-    PRIVATE GMock::GMock
+    PRIVATE gtest_main
     PRIVATE gmock_main
 )
 
 enable_testing()
 add_test(NAME banking_tests COMMAND banking_tests)
 
-# Enable coverage
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_options(banking_tests PRIVATE --coverage)
     target_link_options(banking_tests PRIVATE --coverage)
