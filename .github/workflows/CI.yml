@@ -13,22 +13,26 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y build-essential cmake lcov
         
-    - name: Configure and Build
+    - name: Configure
       run: |
         mkdir -p build
         cd build
-        cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON ..
-        cmake --build . --config Debug --target banking_tests
+        cmake -DBUILD_TESTING=ON ..
+        
+    - name: Build
+      run: |
+        cd build
+        cmake --build . --target banking_tests
         
     - name: Run tests
       run: |
         cd build
-        ctest --output-on-failure -V
+        ctest --verbose
         
     - name: Generate coverage
       run: |
         cd build
-        lcov --capture --directory banking/CMakeFiles/banking.dir/src --output-file coverage.info
+        lcov --capture --directory . --output-file coverage.info
         lcov --remove coverage.info '/usr/*' '*/tests/*' --output-file coverage.info
         genhtml coverage.info --output-directory coverage_report
         
