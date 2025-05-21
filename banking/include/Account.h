@@ -9,7 +9,8 @@ public:
     virtual void Lock();
     virtual void Unlock();
     
-    int id() const { return id_; }
+    // Делаем метод виртуальным
+    virtual int id() const { return id_; }
 
 private:
     int id_;
