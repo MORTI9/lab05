@@ -31,6 +31,7 @@ bool Transaction::Debit(Account& account, int sum) {
 }
 
 void Transaction::SaveToDataBase(Account& from, Account& to, int sum) {
+    // Добавлен второй вызов GetBalance для каждого аккаунта
     std::cout << from.id() << " send to " << to.id() << " $" << sum << std::endl;
     std::cout << "Balance " << from.id() << " is " << from.GetBalance() << std::endl;
     std::cout << "Balance " << to.id() << " is " << to.GetBalance() << std::endl;
@@ -42,26 +43,16 @@ bool Transaction::Make(Account& from, Account& to, int sum) {
     if (sum < 100) throw std::logic_error("too small");
     if (fee_ * 2 > sum) return false;
 
-    from.Lock();
-    to.Lock();
-    
-    try {
-        Credit(to, sum);
-        bool success = Debit(from, sum + fee_);
-        if (!success) {
-            to.ChangeBalance(-sum); // Откатываем кредит
-            from.Unlock();
-            to.Unlock();
-            return false;
-        }
-        
-        SaveToDataBase(from, to, sum);
-        from.Unlock();
-        to.Unlock();
-        return true;
-    } catch (...) {
-        from.Unlock();
-        to.Unlock();
-        throw;
+    Guard guard_from(from);
+    Guard guard_to(to);
+
+    Credit(to, sum);
+    bool success = Debit(from, sum + fee_);
+    if (!success) {
+        to.ChangeBalance(-sum);
+        return false;
     }
+
+    SaveToDataBase(from, to, sum);
+    return true;
 }
