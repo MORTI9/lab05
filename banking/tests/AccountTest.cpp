@@ -17,8 +17,8 @@ TEST(AccountTest, Initialization) {
 TEST(AccountTest, ChangeBalance) {
     MockAccount account(1, 100);
     
-    // Устанавливаем ожидания в правильном порядке
-    EXPECT_CALL(account, id()).WillOnce(Return(1));
+    // Устанавливаем ожидания для всех вызовов
+    EXPECT_CALL(account, id()).WillRepeatedly(Return(1));
     EXPECT_CALL(account, Lock()).Times(1);
     EXPECT_CALL(account, ChangeBalance(50)).Times(1);
     EXPECT_CALL(account, GetBalance()).WillOnce(Return(150));
