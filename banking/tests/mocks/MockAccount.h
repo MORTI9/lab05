@@ -11,6 +11,6 @@ public:
     MOCK_METHOD(void, Lock, (), (override));
     MOCK_METHOD(void, Unlock, (), (override));
     
-    // Используем реальную реализацию id() вместо mock
+    // Используем реальную реализацию вместо mock
     int id() const override { return id_; }
 };
