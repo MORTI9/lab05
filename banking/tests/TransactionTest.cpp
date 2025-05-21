@@ -105,8 +105,6 @@ TEST(TransactionTest, SaveToDatabaseOutputsCorrectInfo) {
     MockAccount from(1, 200);
     MockAccount to(2, 50);
 
-    EXPECT_CALL(from, id()).WillRepeatedly(Return(1));
-    EXPECT_CALL(to, id()).WillRepeatedly(Return(2));
     EXPECT_CALL(from, GetBalance()).WillOnce(Return(100));
     EXPECT_CALL(to, GetBalance()).WillOnce(Return(150));
 
@@ -117,4 +115,5 @@ TEST(TransactionTest, SaveToDatabaseOutputsCorrectInfo) {
     EXPECT_TRUE(output.find("1 send to 2 $100") != std::string::npos);
     EXPECT_TRUE(output.find("Balance 1 is 100") != std::string::npos);
     EXPECT_TRUE(output.find("Balance 2 is 150") != std::string::npos);
+}
 }
