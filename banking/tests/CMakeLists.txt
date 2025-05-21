@@ -17,10 +17,10 @@ target_include_directories(banking_tests
     PRIVATE ${CMAKE_SOURCE_DIR}/include
     PRIVATE ${CMAKE_SOURCE_DIR}/tests/mocks
 )
-
 target_link_libraries(banking_tests
     PRIVATE banking
-    PRIVATE gtest_main
+    PRIVATE GTest::GTest
+    PRIVATE GMock::GMock
     PRIVATE gmock_main
 )
 
