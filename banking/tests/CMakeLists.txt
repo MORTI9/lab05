@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
 
-# Загрузка GoogleTest
 include(FetchContent)
 FetchContent_Declare(
     googletest
@@ -9,33 +8,26 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-# Исполняемый файл тестов
 add_executable(banking_tests
     AccountTest.cpp
     TransactionTest.cpp
 )
 
-# Настройка include
 target_include_directories(banking_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../include
     ${CMAKE_CURRENT_SOURCE_DIR}/mocks
 )
 
-# Линковка (ИСПРАВЛЕННАЯ ВЕРСИЯ)
 target_link_libraries(banking_tests PRIVATE
     banking
-    gtest
-    gmock
     gtest_main
+    gmock_main
 )
 
-# Явная регистрация тестов
 enable_testing()
-add_test(NAME banking_tests 
-    COMMAND $<TARGET_FILE:banking_tests>
-)
+add_test(NAME AccountTests COMMAND banking_tests --gtest_filter=AccountTest*)
+add_test(NAME TransactionTests COMMAND banking_tests --gtest_filter=TransactionTest*)
 
-# Покрытие кода
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_options(banking_tests PRIVATE --coverage)
     target_link_options(banking_tests PRIVATE --coverage)
