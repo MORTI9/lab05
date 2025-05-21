@@ -11,12 +11,11 @@ class Transaction {
   int fee() const { return fee_; }
   void set_fee(int fee) { fee_ = fee; }
 
- private:
-  void Credit(Account& accout, int sum);
-  bool Debit(Account& accout, int sum);
-
-  // Virtual to test.
+ protected:  // Изменили с private на protected для тестирования
+  virtual void Credit(Account& account, int sum);
+  virtual bool Debit(Account& account, int sum);
   virtual void SaveToDataBase(Account& from, Account& to, int sum);
 
+ private:
   int fee_;
 };
