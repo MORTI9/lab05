@@ -28,7 +28,7 @@ jobs:
     - name: Generate coverage
       run: |
         cd build
-        lcov --capture --directory . --output-file coverage.info
+        lcov --capture --directory banking/CMakeFiles/banking.dir/src --output-file coverage.info
         lcov --remove coverage.info '/usr/*' '*/tests/*' --output-file coverage.info
         genhtml coverage.info --output-directory coverage_report
         
