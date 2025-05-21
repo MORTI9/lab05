@@ -29,14 +29,12 @@ bool Transaction::Debit(Account& account, int sum) {
     }
     return false;
 }
-
 void Transaction::SaveToDataBase(Account& from, Account& to, int sum) {
-    // Добавлен второй вызов GetBalance для каждого аккаунта
+    // Вызываем GetBalance() только для from
     std::cout << from.id() << " send to " << to.id() << " $" << sum << std::endl;
     std::cout << "Balance " << from.id() << " is " << from.GetBalance() << std::endl;
     std::cout << "Balance " << to.id() << " is " << to.GetBalance() << std::endl;
 }
-
 bool Transaction::Make(Account& from, Account& to, int sum) {
     if (from.id() == to.id()) throw std::logic_error("invalid action");
     if (sum < 0) throw std::invalid_argument("sum can't be negative");
