@@ -1,10 +1,10 @@
 #include "mocks/MockAccount.h"
 #include <gtest/gtest.h>
 
-TEST(AccountTest, InitialBalance) {
+TEST(AccountTest, Initialization) {
     MockAccount account(1, 100);
-    EXPECT_EQ(account.GetBalance(), 100);
     EXPECT_EQ(account.id(), 1);
+    EXPECT_EQ(account.GetBalance(), 100);
 }
 
 TEST(AccountTest, ChangeBalance) {
