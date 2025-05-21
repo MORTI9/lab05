@@ -2,28 +2,31 @@ name: Banking CI
 
 on: [push, pull_request]
 
+env:
+  BUILD_TYPE: Debug
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential cmake
+        sudo apt-get install -y build-essential cmake lcov
         
     - name: Create build directory
       run: mkdir -p build
       
     - name: Configure CMake
       working-directory: ./build
-      run: cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON ../banking
+      run: cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_TESTING=ON ../banking
       
     - name: Build
       working-directory: ./build
-      run: cmake --build . --config Debug
+      run: cmake --build . --config $BUILD_TYPE
       
     - name: Run tests
       working-directory: ./build
@@ -34,11 +37,11 @@ jobs:
       run: |
         cd build
         lcov --capture --directory . --output-file coverage.info
-        lcov --remove coverage.info '/usr/*' --output-file coverage.info
+        lcov --remove coverage.info '/usr/*' '*/tests/*' --output-file coverage.info
         genhtml coverage.info --output-directory coverage_report
       
     - name: Upload coverage report
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: coverage-report
         path: build/coverage_report
