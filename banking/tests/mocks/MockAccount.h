@@ -10,4 +10,7 @@ public:
     MOCK_METHOD(void, ChangeBalance, (int diff), (override));
     MOCK_METHOD(void, Lock, (), (override));
     MOCK_METHOD(void, Unlock, (), (override));
+    
+    // Реальная реализация id()
+    int id() const override { return Account::id(); }
 };
