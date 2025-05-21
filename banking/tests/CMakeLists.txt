@@ -21,18 +21,18 @@ target_include_directories(banking_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/mocks
 )
 
-# Линковка
+# Линковка (ИСПРАВЛЕННАЯ ВЕРСИЯ)
 target_link_libraries(banking_tests PRIVATE
     banking
-    GTest::GTest
-    GTest::Main
+    gtest
+    gmock
+    gtest_main
 )
 
 # Явная регистрация тестов
 enable_testing()
 add_test(NAME banking_tests 
     COMMAND $<TARGET_FILE:banking_tests>
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 # Покрытие кода
