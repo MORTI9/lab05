@@ -1,5 +1,5 @@
 #include "Transaction.h"
-#include <cstddef>
+#include <cassert>  // Добавлен этот include
 #include <iostream>
 #include <stdexcept>
 #include "Account.h"
@@ -17,7 +17,6 @@ struct Guard {
 Transaction::Transaction() : fee_(1) {}
 Transaction::~Transaction() {}
 
-// Реализация виртуальных методов
 void Transaction::Credit(Account& account, int sum) {
   assert(sum > 0);
   account.ChangeBalance(sum);
