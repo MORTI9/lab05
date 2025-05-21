@@ -42,13 +42,26 @@ bool Transaction::Make(Account& from, Account& to, int sum) {
     if (sum < 100) throw std::logic_error("too small");
     if (fee_ * 2 > sum) return false;
 
-    Guard guard_from(from);
-    Guard guard_to(to);
-
-    Credit(to, sum);
-    bool success = Debit(from, sum + fee_);
-    if (!success) to.ChangeBalance(-sum);
-
-    SaveToDataBase(from, to, sum);
-    return success;
+    from.Lock();
+    to.Lock();
+    
+    try {
+        Credit(to, sum);
+        bool success = Debit(from, sum + fee_);
+        if (!success) {
+            to.ChangeBalance(-sum); // Откатываем кредит
+            from.Unlock();
+            to.Unlock();
+            return false;
+        }
+        
+        SaveToDataBase(from, to, sum);
+        from.Unlock();
+        to.Unlock();
+        return true;
+    } catch (...) {
+        from.Unlock();
+        to.Unlock();
+        throw;
+    }
 }
