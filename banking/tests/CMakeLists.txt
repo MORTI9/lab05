@@ -18,20 +18,20 @@ target_include_directories(banking_tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/mocks
 )
 
+# Исправленные цели линковки
 target_link_libraries(banking_tests PRIVATE
     banking
-    GTest::GTest
-    GTest::Main
+    gtest
+    gmock
+    gtest_main
 )
 
 enable_testing()
 
-# Явная регистрация тестов через gtest_discover_tests
+# Автоматическое обнаружение тестов
 include(GoogleTest)
 gtest_discover_tests(banking_tests
-    EXTRA_ARGS --gtest_output=xml:${CMAKE_BINARY_DIR}/test_results.xml
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    PROPERTIES LABELS "unit_tests"
 )
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
