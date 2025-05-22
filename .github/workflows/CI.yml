@@ -22,18 +22,17 @@ jobs:
     - name: Build
       run: |
         cd build
-        cmake --build . --target banking_tests
+        cmake --build .
         
     - name: Run tests
       run: |
         cd build
-        ./banking/tests/banking_tests --gtest_output=xml:test_results.xml
         ctest --output-on-failure -V
         
     - name: Generate coverage
       run: |
         cd build
-        lcov --capture --directory . --output-file coverage.info
+        lcov --capture --directory banking/CMakeFiles/banking.dir/src --output-file coverage.info
         lcov --remove coverage.info '/usr/*' '*/tests/*' --output-file coverage.info
         genhtml coverage.info --output-directory coverage_report
         
