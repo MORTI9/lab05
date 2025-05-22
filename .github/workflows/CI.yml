@@ -22,17 +22,12 @@ jobs:
     - name: Build
       run: |
         cd build
-        cmake --build . --target banking_tests
-        
-    - name: List tests (debug)
-      run: |
-        cd build
-        ctest -N
+        cmake --build .
         
     - name: Run tests
       run: |
         cd build
-        ctest --output-on-failure -V
+        ctest --output-on-failure -V --test-dir banking/tests
         
     - name: Generate coverage
       run: |
