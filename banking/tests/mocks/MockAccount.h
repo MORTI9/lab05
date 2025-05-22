@@ -7,10 +7,9 @@ public:
     MockAccount(int id, int balance) : Account(id, balance) {}
     
     MOCK_METHOD(int, GetBalance, (), (const, override));
-    MOCK_METHOD(void, ChangeBalance, (int diff), (override));
+    MOCK_METHOD(void, ChangeBalance, (int), (override));  // Исправленная сигнатура
     MOCK_METHOD(void, Lock, (), (override));
     MOCK_METHOD(void, Unlock, (), (override));
     
-    // Теперь метод может быть переопределен
-    MOCK_METHOD(int, id, (), (const, override));
+    int id() const override { return id_; }
 };
