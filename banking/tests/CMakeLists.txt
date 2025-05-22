@@ -43,21 +43,12 @@ endfunction()
 add_gtest(AccountTest)
 add_gtest(TransactionTest)
 
-# Настройка покрытия кода
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_options(banking_tests PRIVATE --coverage)
-    target_link_options(banking_tests PRIVATE --coverage)
-endif()
-# Добавьте в конец файла:
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     # Для основного кода
-    target_compile_options(banking PRIVATE --coverage)
-    target_link_options(banking PRIVATE --coverage)
+    target_compile_options(banking PRIVATE --coverage -fprofile-dir=${CMAKE_BINARY_DIR}/coverage_data)
+    target_link_options(banking PRIVATE --coverage -fprofile-dir=${CMAKE_BINARY_DIR}/coverage_data)
     
     # Для тестов
-    target_compile_options(banking_tests PRIVATE --coverage)
-    target_link_options(banking_tests PRIVATE --coverage)
-    
-    # Указываем сохранять .gcda файлы
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-abs-path -fprofile-dir=${CMAKE_BINARY_DIR}/coverage")
+    target_compile_options(banking_tests PRIVATE --coverage -fprofile-dir=${CMAKE_BINARY_DIR}/coverage_data)
+    target_link_options(banking_tests PRIVATE --coverage -fprofile-dir=${CMAKE_BINARY_DIR}/coverage_data)
 endif()
