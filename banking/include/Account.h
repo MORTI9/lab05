@@ -5,11 +5,10 @@ public:
     virtual ~Account();
 
     virtual int GetBalance() const;
-    virtual void ChangeBalance(int diff);
+    virtual void ChangeBalance(int diff);  // Исправленная сигнатура
     virtual void Lock();
     virtual void Unlock();
     
-    // Делаем метод виртуальным
     virtual int id() const { return id_; }
 
 private:
