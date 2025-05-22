@@ -22,7 +22,12 @@ jobs:
     - name: Build
       run: |
         cd build
-        cmake --build .
+        cmake --build . --target banking_tests
+        
+    - name: List tests (debug)
+      run: |
+        cd build
+        ctest -N
         
     - name: Run tests
       run: |
