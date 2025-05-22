@@ -8,6 +8,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
+# Создаем тестовый исполняемый файл
 add_executable(banking_tests
     AccountTest.cpp
     TransactionTest.cpp
@@ -24,24 +25,28 @@ target_link_libraries(banking_tests PRIVATE
     gmock_main
 )
 
+# Включаем систему тестирования
 enable_testing()
 
-# Явно регистрируем тестовый исполняемый файл
-add_test(NAME banking_tests 
-    COMMAND banking_tests
+# Регистрируем тестовые случаи
+add_test(
+    NAME AccountTests
+    COMMAND banking_tests --gtest_filter=AccountTest*
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-# Альтернативно можно регистрировать отдельные тестовые случаи
-function(add_gtest TEST_NAME)
-    add_test(NAME ${TEST_NAME}
-        COMMAND banking_tests --gtest_filter=${TEST_NAME}*
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    )
-endfunction()
+add_test(
+    NAME TransactionTests
+    COMMAND banking_tests --gtest_filter=TransactionTest*
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
 
-add_gtest(AccountTest)
-add_gtest(TransactionTest)
+# Альтернативный вариант - регистрация всех тестов
+add_test(
+    NAME AllTests
+    COMMAND banking_tests
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_options(banking_tests PRIVATE --coverage)
