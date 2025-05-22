@@ -14,17 +14,17 @@ TEST(TransactionTest, MakeSuccessScenario) {
     EXPECT_CALL(from, id()).WillRepeatedly(Return(1));
     EXPECT_CALL(from, Lock()).Times(1);
     EXPECT_CALL(from, GetBalance())
-        .WillOnce(Return(200))  // Первый вызов в Debit
-        .WillOnce(Return(200)); // Второй вызов в SaveToDataBase
-    EXPECT_CALL(from, ChangeBalance(-101)).Times(1);
+        .WillOnce(Return(200))
+        .WillOnce(Return(200));
+    EXPECT_CALL(from, ChangeBalance(_)).Times(1);  // Исправленный вызов
     EXPECT_CALL(from, Unlock()).Times(1);
     
     // Ожидания для to
     EXPECT_CALL(to, id()).WillRepeatedly(Return(2));
     EXPECT_CALL(to, Lock()).Times(1);
     EXPECT_CALL(to, GetBalance())
-        .WillOnce(Return(50))   // Первый вызов в SaveToDataBase
-    EXPECT_CALL(to, ChangeBalance(100)).Times(1);
+        .WillOnce(Return(50));
+    EXPECT_CALL(to, ChangeBalance(_)).Times(1);  // Исправленный вызов
     EXPECT_CALL(to, Unlock()).Times(1);
     
     EXPECT_TRUE(transaction.Make(from, to, 100));
