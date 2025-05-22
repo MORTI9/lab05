@@ -34,26 +34,31 @@ jobs:
     - name: Generate coverage report
       run: |
         cd build
-        # Сначала запускаем тесты для генерации .gcda
-        ./banking/tests/banking_tests
+        #  Создаем директорию для coverage данных
+        mkdir -p coverage_data
     
-         # Теперь собираем coverage
+        # Копируем .gcda и .gcno файлы в одну директорию
+        find . -name "*.gcda" -exec cp --parents {} coverage_data \;
+        find . -name "*.gcno" -exec cp --parents {} coverage_data \;
+    
+        # Генерируем отчет из собранных файлов
         lcov --capture \
-             --directory . \
-             --output-file coverage.info \
-             --rc lcov_branch_coverage=1
+           --directory coverage_data \
+           --output-file coverage.info \
+           --rc branch_coverage=1
     
+        # Фильтруем результаты
         lcov --remove coverage.info \
-             '/usr/*' \
-             '*/tests/*' \
-             --output-file coverage.info \
-             --rc lcov_branch_coverage=1
+           '/usr/*' \
+           '*/tests/*' \
+           --output-file coverage.info \
+           --rc branch_coverage=1
     
+        # Генерируем HTML отчет
         genhtml coverage.info \
-              --output-directory coverage_report \
-              --branch-coverage \
-              --legend
-        
+            --output-directory coverage_report \
+            --branch-coverage \
+            --legend
     - name: Upload coverage
       uses: actions/upload-artifact@v4
       with:
