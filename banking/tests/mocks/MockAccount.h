@@ -7,9 +7,10 @@ public:
     MockAccount(int id, int balance) : Account(id, balance) {}
     
     MOCK_METHOD(int, GetBalance, (), (const, override));
-    MOCK_METHOD(void, ChangeBalance, (int), (override));  // Исправленная сигнатура
+    MOCK_METHOD(void, ChangeBalance, (int), (override));
     MOCK_METHOD(void, Lock, (), (override));
     MOCK_METHOD(void, Unlock, (), (override));
     
-    int id() const override { return id_; }
+    // Убираем override и используем реализацию базового класса
+    int id() const { return Account::id(); }
 };
