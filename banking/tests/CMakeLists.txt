@@ -25,8 +25,23 @@ target_link_libraries(banking_tests PRIVATE
 )
 
 enable_testing()
-add_test(NAME AccountTests COMMAND banking_tests --gtest_filter=AccountTest*)
-add_test(NAME TransactionTests COMMAND banking_tests --gtest_filter=TransactionTest*)
+
+# Явно регистрируем тестовый исполняемый файл
+add_test(NAME banking_tests 
+    COMMAND banking_tests
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
+
+# Альтернативно можно регистрировать отдельные тестовые случаи
+function(add_gtest TEST_NAME)
+    add_test(NAME ${TEST_NAME}
+        COMMAND banking_tests --gtest_filter=${TEST_NAME}*
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    )
+endfunction()
+
+add_gtest(AccountTest)
+add_gtest(TransactionTest)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_options(banking_tests PRIVATE --coverage)
